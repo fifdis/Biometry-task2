@@ -58,9 +58,9 @@ def Scale_func(file):
     img_res = transform.resize(img, (40, 40))
     return img_res
 
-#функция построения графиков
+# Функция построения графиков
 def Build_Charts_func(num_e, num_c, start_pos, step, end_pos, ch_func):
-    #для финальных результатов
+    # Для финальных результатов
     stat_dct = []
     stat_dft = []
     stat_scale = []
@@ -71,10 +71,10 @@ def Build_Charts_func(num_e, num_c, start_pos, step, end_pos, ch_func):
     stat_scale_indv = []
     stat_hist_indv = []
     stat_grad_indv = []
-    #пороговые значения
+    # Пороговые значения
     delta_k_h = 230
     delta_k_g = 80
-    #для тестов
+    # Для тестов
     t_img_a = []
     t_hist = []
     t_grad = []
@@ -97,10 +97,9 @@ def Build_Charts_func(num_e, num_c, start_pos, step, end_pos, ch_func):
         help_pos = 1
     if(ch_func == 2):
         help_pos = 0
-    #определение числа подпапок
-    #num_subfolders = len([f.path for f in os.scandir("ORLdataset") if f.is_dir()])
+    # Определение числа классов
     num_subfolders = num_c
-    #перебор подпапок (классов/людей)
+    # Перебор подпапок (классов/людей)
     for i in range(1, num_subfolders+1, 1):
         sum_h = 0
         sum_g = 0
@@ -108,7 +107,7 @@ def Build_Charts_func(num_e, num_c, start_pos, step, end_pos, ch_func):
         sum_sim_dct = 0
         sum_sim_scale = 0
         num_files = len([f for f in os.listdir(f"ORLdataset/s{i}") if os.path.isfile(os.path.join(f"ORLdataset/s{i}", f))])
-        #перебор эталонов
+        # Перебор эталонов
         for j in range(start_pos, end_pos + 1, step):
             res_h = 0
             res_g = 0
@@ -130,26 +129,26 @@ def Build_Charts_func(num_e, num_c, start_pos, step, end_pos, ch_func):
                 t_dft.append(DFT_func(t_img))
                 t_dct.append(DCT_func(t_img))
                 t_scale.append(Scale_func(fln_t))
-                #уменьшение процесса исправления и предусмотр четного/нечетного выбора
+                # Уменьшение процесса исправления и предусмотр четного/нечетного выбора
                 if (ch_func == 0):
                     jjj = j - 1 + num_e * (i - 1)
                     kkk = k - num_e - 1 + (10 - num_e) * (i - 1)
                 else:
                     jjj = ind_et
                     kkk = ind_t
-                #вычисление максимума на эталоне гистограммы
+                # Вычисление максимума на эталоне гистограммы
                 in_e_h, e_m_h = max(enumerate(e_hist[jjj]), key=operator.itemgetter(1))
-                #вычисление максимума на эталоне градиента
+                # Вычисление максимума на эталоне градиента
                 in_e_g, e_m_g = max(enumerate(e_grad[jjj]), key=operator.itemgetter(1))
-                #максимум для тестовой гистограммы по соотвествтующему индексу
+                # Максимум для тестовой гистограммы по соотвествтующему индексу
                 t_max_h = t_hist[kkk][in_e_h]
-                #максимум для тестового градиента по соотвествтующему индексу
+                # Максимум для тестового градиента по соотвествтующему индексу
                 t_max_g = t_grad[kkk][in_e_g]
-                #разница по гистограмме
+                # Разница по гистограмме
                 delt_h = abs(e_m_h - t_max_h)
-                #разница по градиенту
+                # Разница по градиенту
                 delt_g = abs(e_m_g - t_max_g)
-                #сравнение с лимитами
+                # Сравнение с границами
                 if (delt_h < delta_k_h):
                     stat_hist_indv.append(1)
                     res_h += 1
@@ -242,7 +241,7 @@ def Build_Charts_func(num_e, num_c, start_pos, step, end_pos, ch_func):
     ax_1.set_title('Тест')
     i_a = ax_1.imshow(t_img_a[0], cmap='gray')
     ax_2.set_title(f'Гистограмма:{round(stat_hist_indv[0],3)}')
-    h_a, = ax_2.plot(t_hist[0], color="brown")
+    h_a, = ax_2.plot(t_hist[0], color="green")
     stat_dft_indv = np.round(stat_dft_indv, decimals=3)
     ax_3.set_title(f'DFT:{round(stat_dft_indv[0],3)}')
     df_a = ax_3.imshow(t_dft[0], cmap='gray', vmin=0, vmax=255)
@@ -251,7 +250,7 @@ def Build_Charts_func(num_e, num_c, start_pos, step, end_pos, ch_func):
     dc_a = ax_4.imshow(np.abs(t_dct[0]), vmin=0, vmax=255)
     x = np.arange(len(t_grad[0]))
     ax_5.set_title(f'Градиент:{round(stat_grad_indv[0],3)}')
-    g_a, = ax_5.plot(x, t_grad[0], color="brown")
+    g_a, = ax_5.plot(x, t_grad[0], color="green")
     stat_scale = np.round(stat_scale, decimals=3)
     ax_6.set_title(f'Scale:{round(stat_scale[0],3)}')
     sc_a = ax_6.imshow(t_scale[0], cmap='gray')
@@ -284,11 +283,12 @@ def Build_Charts_func(num_e, num_c, start_pos, step, end_pos, ch_func):
     #fig1.set_size_inches(19, 5)
     fig1.show()
     #fig2.set_size_inches(19, 5)
-    fig2.show()
+   # fig2.show()
     #поиск числа подпапок
     num_subfolders = num_c
     #num_subfolders = len([f.path for f in os.scandir("ORLdataset") if f.is_dir()])
     #перебор подпапок
+
     for t in range(0, num_subfolders, 1):
         axH.plot(x_r_h[0:t+1:1], stat_hist[0:t+1:1], color="green")
         axH.set_title('Гистограмма')
@@ -341,11 +341,11 @@ def Build_Charts_func(num_e, num_c, start_pos, step, end_pos, ch_func):
                 #отрисовка фигур
                 fig1.canvas.draw()
                 fig1.canvas.flush_events()
-                fig2.canvas.draw()
-                fig2.canvas.flush_events()
-    plt.pause(30)
+               # fig2.canvas.draw()
+               # fig2.canvas.flush_events()
+    plt.pause(120)
     plt.close()
-#построение графиков через выбранные файлы
+# Построение графиков через выбранные файлы
 def Build_Charts_With_Chosen_func(filename1, filename2):
     delta_k_h = 100
     delta_k_g = 80
@@ -391,10 +391,10 @@ def Build_Charts_With_Chosen_func(filename1, filename2):
     sum_sim_dct += similarity_percent_dct
     ssim = metrics.structural_similarity(e_scale, t_scale, data_range=255)
     plt.subplot(3, 6, 13)
-    plt.imshow(e_or_img)
+    plt.imshow(e_or_img, cmap='gray')
     plt.title("Эталон")
     plt.subplot(3, 6, 14)
-    plt.plot(e_hist, color="brown")
+    plt.plot(e_hist, color="green")
     plt.title("Гистограмма")
     plt.subplot(3, 6, 15)
     plt.imshow(e_dft, cmap='gray', vmin=0, vmax=255)
@@ -404,16 +404,16 @@ def Build_Charts_With_Chosen_func(filename1, filename2):
     plt.title("DCT")
     plt.subplot(3, 6, 17)
     x = np.arange(len(e_grad))
-    plt.plot(x, e_grad, color="brown")
+    plt.plot(x, e_grad, color="green")
     plt.title("Градиент")
     plt.subplot(3, 6, 18)
-    plt.imshow(e_scale)
+    plt.imshow(e_scale, cmap='gray')
     plt.title("Scale")
     plt.subplot(3, 6, 1)
-    plt.imshow(t_or_img)
+    plt.imshow(t_or_img, cmap='gray')
     plt.title("Тест")
     plt.subplot(3, 6, 2)
-    plt.plot(t_hist, color="brown")
+    plt.plot(t_hist, color="green")
     plt.title("Гистограмма")
     plt.subplot(3, 6, 3)
     plt.imshow(t_dft, cmap='gray', vmin=0, vmax=255)
@@ -423,10 +423,10 @@ def Build_Charts_With_Chosen_func(filename1, filename2):
     plt.title("DCT")
     plt.subplot(3, 6, 5)
     x = np.arange(len(t_grad))
-    plt.plot(x, t_grad, color="brown")
+    plt.plot(x, t_grad, color="green")
     plt.title("Градиент")
     plt.subplot(3, 6, 6)
-    plt.imshow(t_scale)
+    plt.imshow(t_scale, cmap='gray')
     plt.title("Scale")
     if (res_g != 0 and res_h != 0 and similarity_percent_dft >= 0.5 and similarity_percent_dct >= 0.5 and ssim >= 0.5):
         Show_Results_func("Найдено совпадение")
@@ -434,7 +434,7 @@ def Build_Charts_With_Chosen_func(filename1, filename2):
         Show_Results_func("Совпадений нет.")
     plt.show()
 
-#построение графиков кросс-валидации по файлу и числу эталонов
+# Построение графиков кросс-валидации по файлу и числу эталонов
 def Build_Charts_With_Chosen_Dir_func(filename, num_e):
     stat_dct = []
     stat_dft = []
@@ -615,7 +615,7 @@ def Build_Charts_With_Chosen_Dir_func(filename, num_e):
                 fig1.canvas.flush_events()
     plt.waitforbuttonpress()
     plt.close()
-#функция получения кол-ва эталонов
+# Функция получения кол-ва эталонов
 def Get_eAmount_func(choosed_op):
     num_etalons = num_etalons_entry.get()
     num_classes = num_classes_entry.get()
@@ -638,7 +638,7 @@ def Get_eAmount_func(choosed_op):
     else:
         tk.showerror("Ошибка!", "Должно быть введено целое положительное число!")
 
-#функция выбора тестовых
+# Выбор тестовых
 def Select_Test_func(e_n, filename1):
     num_etalons = e_n
     if num_etalons.isdigit() and int(num_etalons) > 0:
@@ -646,17 +646,18 @@ def Select_Test_func(e_n, filename1):
     else:
         tk.showerror("WARNING", "Должно быть введено целое целое положительное число")
 
-#функция открытия файлого диалога и перехода к построению
+# Файловый диалог
 def Select_Activation_func():
     filename1 = fd.askopenfilename()
     filename2 = fd.askopenfilename()
     Build_Charts_With_Chosen_func(filename1, filename2)
 
-#функция показа результатов
+# Отображение результата
 def Show_Results_func(text):
     msg = text
     mb.showinfo("Результат", msg)
 
+# Кросс-валидация
 def Select_CrossValidation():
     root1 = tk.Tk()
     root1.geometry('300x150')
@@ -666,7 +667,7 @@ def Select_CrossValidation():
     plot_button3 = tk.Button(root1, text="Четные эталоны", command=lambda: Get_eAmount_func(int(2)))
     plot_button3.pack()
 
-# Смена цвета для кнопок
+# Смена цвета для кнопок при наведении
 def on_enter(e):
     e.widget['background'] = 'blue'
 def on_leave(e):
@@ -701,6 +702,5 @@ plot_button4 = tk.Button(root, text="Кросс-валидация", width=40, h
 plot_button4.pack()
 plot_button4.bind("<Enter>", on_enter)
 plot_button4.bind("<Leave>", on_leave)
-#главный цикл обработки событий
 root.mainloop()
 
